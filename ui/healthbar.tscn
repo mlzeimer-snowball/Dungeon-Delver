@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://16vc1mxxd2e7"]
+
+[ext_resource type="Texture2D" uid="uid://fa1gfbwck57h" path="res://ui/mising_health.png" id="1_78psk"]
+[ext_resource type="Texture2D" uid="uid://dkllpnuqnihd0" path="res://ui/remaining_health.png" id="2_eerok"]
+[ext_resource type="Script" uid="uid://tis6xalvfnho" path="res://ui/healthbar.gd" id="3_eerok"]
+[ext_resource type="Resource" uid="uid://cvd75jsk6cfr4" path="res://player/player_stats.tres" id="4_rwa8u"]
+
+[node name="healthbar" type="TextureProgressBar" unique_id=1785150700]
+offset_right = 67.0
+offset_bottom = 16.0
+texture_under = ExtResource("1_78psk")
+texture_progress = ExtResource("2_eerok")
+script = ExtResource("3_eerok")
+player_stats = ExtResource("4_rwa8u")

@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://qopvvt3pqdab"]
+
+[ext_resource type="Texture2D" uid="uid://f6okirdyy6n" path="res://effects/death_effect.png" id="1_t8att"]
+[ext_resource type="AudioStream" uid="uid://l6tykqrjndet" path="res://music_and_sounds/explosion.wav" id="2_rjmvn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjmvn"]
+atlas = ExtResource("1_t8att")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_deii7"]
+atlas = ExtResource("1_t8att")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_86lnp"]
+atlas = ExtResource("1_t8att")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agcih"]
+atlas = ExtResource("1_t8att")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tpr1d"]
+atlas = ExtResource("1_t8att")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lp0u"]
+atlas = ExtResource("1_t8att")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a7emg"]
+atlas = ExtResource("1_t8att")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yom0v"]
+atlas = ExtResource("1_t8att")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t6tik"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rjmvn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_deii7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_86lnp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_agcih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tpr1d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0lp0u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a7emg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yom0v")
+}],
+"loop": false,
+"name": &"default",
+"speed": 15.0
+}]
+
+[node name="DeathEffect" type="AnimatedSprite2D" unique_id=560070693]
+sprite_frames = SubResource("SpriteFrames_t6tik")
+autoplay = "default"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=914316027]
+stream = ExtResource("2_rjmvn")
+autoplay = true
+bus = &"Sounds"
+
+[connection signal="animation_finished" from="." to="." method="queue_free"]

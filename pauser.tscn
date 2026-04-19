@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dexr023aevc74"]
+
+[ext_resource type="AudioStream" uid="uid://bpqrhopbmsgco" path="res://music_and_sounds/pause.wav" id="1_0fmmr"]
+[ext_resource type="Script" uid="uid://bp0s5cjiwxklj" path="res://pauser.gd" id="1_nbo65"]
+[ext_resource type="AudioStream" uid="uid://e84wtu470850" path="res://music_and_sounds/unpause.wav" id="2_nbo65"]
+
+[node name="pauser" type="Node" unique_id=98424627]
+process_mode = 3
+script = ExtResource("1_nbo65")
+
+[node name="PauseAudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1847553622]
+stream = ExtResource("1_0fmmr")
+bus = &"Sounds"
+
+[node name="UnpauseAudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=646890712]
+stream = ExtResource("2_nbo65")
+volume_db = 14.596
+bus = &"Sounds"

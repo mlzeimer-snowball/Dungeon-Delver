@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bg0uywtw61rgb"]
+
+[ext_resource type="Texture2D" uid="uid://ci66idwehhtqs" path="res://world/pit.png" id="1_cwwjb"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cwwjb"]
+radius = 8.0
+height = 64.0
+
+[node name="pit" type="StaticBody2D" unique_id=1739125009]
+collision_mask = 7
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1449716989]
+position = Vector2(0, 19)
+texture = ExtResource("1_cwwjb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1536302494]
+position = Vector2(0, 9)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_cwwjb")

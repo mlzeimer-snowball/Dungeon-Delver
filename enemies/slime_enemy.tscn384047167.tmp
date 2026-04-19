@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://dibn888a1bccm"]
+
+[ext_resource type="Script" uid="uid://c3ftn7dg0idfh" path="res://enemies/slime_enemy.gd" id="1_12qxq"]
+[ext_resource type="Texture2D" uid="uid://c0c5be6gbhdad" path="res://enemies/slime.png" id="1_ysf2m"]
+[ext_resource type="Texture2D" uid="uid://dlplrep8cjocx" path="res://shadows/medium_shadow.png" id="2_12qxq"]
+
+[sub_resource type="Animation" id="Animation_eie7s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="Animation" id="Animation_0j8bk"]
+resource_name = "move"
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 3, 2, 1, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2l27d"]
+_data = {
+&"RESET": SubResource("Animation_eie7s"),
+&"move": SubResource("Animation_0j8bk")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ssnxc"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b1g8n"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_m2x8h"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0temh"]
+advance_mode = 2
+advance_expression = "can_see_player()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hes0y"]
+advance_mode = 2
+advance_expression = "not can_see_player()"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_kkdjt"]
+states/Chase/node = SubResource("AnimationNodeAnimation_ssnxc")
+states/Chase/position = Vector2(379, 217)
+states/Idle/node = SubResource("AnimationNodeAnimation_b1g8n")
+states/Idle/position = Vector2(379, 123)
+states/Start/position = Vector2(167, 123)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_m2x8h"), "Idle", "Chase", SubResource("AnimationNodeStateMachineTransition_0temh"), "Chase", "Idle", SubResource("AnimationNodeStateMachineTransition_hes0y")]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_vf7fb"]
+nodes/output/position = Vector2(540, 120)
+nodes/StateMachine/node = SubResource("AnimationNodeStateMachine_kkdjt")
+nodes/StateMachine/position = Vector2(220, 80)
+node_connections = [&"output", 0, &"StateMachine"]
+
+[node name="SlimeEnemy" type="CharacterBody2D" unique_id=1700317196]
+collision_layer = 2
+collision_mask = 7
+motion_mode = 1
+script = ExtResource("1_12qxq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=914203611]
+texture = ExtResource("1_ysf2m")
+offset = Vector2(0, -2.26)
+hframes = 5
+frame = 4
+
+[node name="ShadowSprite2D" type="Sprite2D" parent="." unique_id=999699161]
+show_behind_parent = true
+position = Vector2(2.842171e-14, 1)
+scale = Vector2(0.6875, 0.2)
+texture = ExtResource("2_12qxq")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1912562819]
+position = Vector2(0, -2)
+polygon = PackedVector2Array(-2, -4, -4, -2, -5, 0, -5, 2, 5, 2, 6, 1, 6, -2, 3, -4)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=773397871]
+root_node = NodePath("../ShadowSprite2D")
+libraries/ = SubResource("AnimationLibrary_2l27d")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=776998811]
+root_node = NodePath("../ShadowSprite2D")
+tree_root = SubResource("AnimationNodeBlendTree_vf7fb")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=1314833243]
+target_position = Vector2(8, 0)
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1314582106]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" unique_id=1555763454]
+polygon = PackedVector2Array(-5, 0, -5, -2, -4, -4, -2, -6, 3, -6, 6, -4, 6, -1, 5, 0, 0, 0)
