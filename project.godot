@@ -32,6 +32,7 @@ window/vsync/vsync_mode=3
 
 player=""
 navigation_polygon_source_geometry_group=""
+enemy=""
 
 [input]
 

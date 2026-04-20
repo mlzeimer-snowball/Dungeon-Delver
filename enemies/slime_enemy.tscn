@@ -161,7 +161,7 @@ node_connections = [&"output", 0, &"StateMachine"]
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2l27d"]
 size = Vector2(13, 8)
 
-[node name="SlimeEnemy" type="CharacterBody2D" unique_id=1700317196]
+[node name="SlimeEnemy" type="CharacterBody2D" unique_id=1700317196 groups=["enemy"]]
 collision_layer = 4
 collision_mask = 5
 motion_mode = 1

@@ -16,6 +16,7 @@ var last_input_vector = Vector2.DOWN
 @onready var hurt_audio_stream_player: AudioStreamPlayer2D = $HurtAudioStreamPlayer
 
 signal health_changed(new_health)
+signal respawned()
 
 func _ready() -> void:
 	hurtbox.hurt.connect(take_hit.call_deferred)
@@ -32,9 +33,10 @@ func _physics_process(delta: float) -> void:
 			roll_state(delta)
 			
 func die() -> void:
-	hide()
-	remove_from_group("player")
-	process_mode = Node.PROCESS_MODE_DISABLED
+	#hide()
+	#remove_from_group("player")
+	#process_mode = Node.PROCESS_MODE_DISABLED
+	respawned.emit()
 
 func move_state(delta: float) -> void:
 	input_vector = Input.get_vector("move_left","move_right","move_up","move_down")

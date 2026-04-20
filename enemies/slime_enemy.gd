@@ -5,6 +5,7 @@ const DEATH_EFFECT = preload("uid://qopvvt3pqdab")
 
 const SPEED = 30
 const FRICTION = 500
+const XP = 1
 
 @export var min_range: = 4
 @export var max_range: = 128
@@ -22,6 +23,8 @@ const FRICTION = 500
 @onready var marker_2d: Marker2D = $Marker2D
 
 @export var player: Player
+
+signal enemy_death()
 
 func _ready() -> void:
 	stats = stats.duplicate()
@@ -50,6 +53,7 @@ func die() -> void:
 	var death_effect = DEATH_EFFECT.instantiate()
 	get_tree().current_scene.add_child(death_effect)
 	death_effect.global_position = center.global_position
+	enemy_death.emit()
 	queue_free()
 
 func take_hit(other_hitbox: Hitbox) -> void:

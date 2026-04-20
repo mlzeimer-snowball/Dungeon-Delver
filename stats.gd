@@ -1,5 +1,7 @@
 class_name Stats extends Resource
 
+@export var points = 0
+
 @export var health: = 1 :
 	set(value):
 		var previous_health = health
