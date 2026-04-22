@@ -9,10 +9,186 @@
 [ext_resource type="PackedScene" uid="uid://dctikxd7ki8vv" path="res://world/boulder.tscn" id="3_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://y8i66d1steai" path="res://enemies/enemy_spawner.tscn" id="4_2o6r5"]
 [ext_resource type="PackedScene" uid="uid://bg0uywtw61rgb" path="res://world/pit.tscn" id="4_aqk2v"]
+[ext_resource type="Script" uid="uid://c3ftn7dg0idfh" path="res://enemies/slime_enemy.gd" id="6_26xuy"]
 [ext_resource type="PackedScene" uid="uid://lueexi6aret5" path="res://world/crate.tscn" id="6_pkg7o"]
+[ext_resource type="Script" uid="uid://cd22rmki6e3rj" path="res://stats.gd" id="7_bc84e"]
 [ext_resource type="PackedScene" uid="uid://dibn888a1bccm" path="res://enemies/slime_enemy.tscn" id="7_pkg7o"]
+[ext_resource type="Texture2D" uid="uid://c0c5be6gbhdad" path="res://enemies/slime.png" id="8_wukud"]
+[ext_resource type="Texture2D" uid="uid://dlplrep8cjocx" path="res://shadows/medium_shadow.png" id="9_il2jm"]
 [ext_resource type="AudioStream" uid="uid://bf5c2r43shamj" path="res://music_and_sounds/Music.wav" id="9_ioo17"]
+[ext_resource type="Script" uid="uid://daf6mth5c04fo" path="res://damage_boxes/hurtbox.gd" id="10_wjb0r"]
 [ext_resource type="PackedScene" uid="uid://dexr023aevc74" path="res://pauser.tscn" id="10_wse8f"]
+[ext_resource type="Script" uid="uid://bb6251mkcxpn5" path="res://damage_boxes/hitbox.gd" id="11_mc2jv"]
+[ext_resource type="PackedScene" uid="uid://bi1j1sro2xikl" path="res://enemies/goblin_enemy.tscn" id="14_70uel"]
+
+[sub_resource type="Resource" id="Resource_2l27d"]
+script = ExtResource("7_bc84e")
+health = 5
+max_health = 5
+metadata/_custom_type_script = "uid://cd22rmki6e3rj"
+
+[sub_resource type="Animation" id="Animation_eie7s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:collision_layer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:collision_mask")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [5]
+}
+
+[sub_resource type="Animation" id="Animation_2l27d"]
+resource_name = "hit"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:collision_layer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:collision_mask")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 5]
+}
+
+[sub_resource type="Animation" id="Animation_0j8bk"]
+resource_name = "move"
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 3, 2, 1, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2l27d"]
+_data = {
+&"RESET": SubResource("Animation_eie7s"),
+&"hit": SubResource("Animation_2l27d"),
+&"move": SubResource("Animation_0j8bk")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ssnxc"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eie7s"]
+animation = &"hit"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b1g8n"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_m2x8h"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0temh"]
+advance_mode = 2
+advance_expression = "can_see_player()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hes0y"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0j8bk"]
+advance_mode = 2
+advance_expression = "velocity == Vector2(0,0)"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_kkdjt"]
+states/ChaseState/node = SubResource("AnimationNodeAnimation_ssnxc")
+states/ChaseState/position = Vector2(379, 217)
+states/End/position = Vector2(761, 123)
+states/HitState/node = SubResource("AnimationNodeAnimation_eie7s")
+states/HitState/position = Vector2(558, 123)
+states/IdleState/node = SubResource("AnimationNodeAnimation_b1g8n")
+states/IdleState/position = Vector2(379, 123)
+states/Start/position = Vector2(167, 123)
+transitions = ["Start", "IdleState", SubResource("AnimationNodeStateMachineTransition_m2x8h"), "IdleState", "ChaseState", SubResource("AnimationNodeStateMachineTransition_0temh"), "ChaseState", "IdleState", SubResource("AnimationNodeStateMachineTransition_hes0y"), "HitState", "IdleState", SubResource("AnimationNodeStateMachineTransition_0j8bk")]
+graph_offset = Vector2(-155, 42)
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_vf7fb"]
+graph_offset = Vector2(-581.63025, -63.32553)
+nodes/output/position = Vector2(540, 120)
+nodes/StateMachine/node = SubResource("AnimationNodeStateMachine_kkdjt")
+nodes/StateMachine/position = Vector2(220, 80)
+node_connections = [&"output", 0, &"StateMachine"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2l27d"]
+size = Vector2(13, 8)
+
+[sub_resource type="PackedScene" id="PackedScene_bo7i5"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [],
+"names": PackedStringArray("SlimeEnemy", "collision_layer", "collision_mask", "motion_mode", "script", "stats", "enemy", "CharacterBody2D", "Sprite2D", "texture", "offset", "hframes", "frame", "ShadowSprite2D", "show_behind_parent", "position", "scale", "CollisionPolygon2D", "polygon", "AnimationPlayer", "root_node", "libraries/", "AnimationTree", "tree_root", "advance_expression_base_node", "anim_player", "RayCast2D", "target_position", "Hurtbox", "metadata/_custom_type_script", "Area2D", "Hitbox", "CollisionShape2D", "shape", "Center", "Marker2D", "NavigationAgent2D", "path_desired_distance", "target_desired_distance"),
+"node_count": 14,
+"node_ids": PackedInt32Array(1700317196, 914203611, 999699161, 1912562819, 773397871, 776998811, 1314833243, 341871132, 1555763454, 956854694, 801072052, 1057576751, 1309018355, 472792611),
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 7, 0, -1, 5, 1, 0, 2, 1, 3, 2, 4, 3, 5, 4, 1, 6, 0, 0, 8, 8, -1, 4, 9, 5, 10, 6, 11, 1, 12, 0, 0, 0, 0, 8, 13, -1, 4, 14, 7, 15, 8, 16, 9, 9, 10, 0, 0, 0, 17, 17, -1, 2, 15, 11, 18, 12, 0, 0, 0, 19, 19, -1, 2, 20, 13, 21, 14, 0, 0, 0, 22, 22, -1, 4, 20, 13, 23, 15, 24, 16, 25, 17, 0, 0, 0, 26, 26, -1, 1, 27, 18, 0, 0, 0, 30, 28, -1, 4, 1, 19, 2, 19, 4, 20, 29, 21, 0, 7, 0, 17, 17, -1, 1, 18, 22, 0, 0, 0, 30, 31, -1, 4, 1, 23, 2, 23, 4, 24, 29, 25, 0, 9, 0, 32, 32, -1, 2, 15, 26, 33, 27, 0, 0, 0, 35, 34, -1, 1, 15, 28, 0, 0, 0, 35, 35, -1, 1, 15, 28, 0, 12, 0, 36, 36, -1, 2, 37, 29, 38, 29, 0),
+"variants": [4, 5, 1, ExtResource("6_26xuy"), SubResource("Resource_2l27d"), ExtResource("8_wukud"), Vector2(0, -2.26), true, Vector2(2.842171e-14, 1), Vector2(0.6875, 0.2), ExtResource("9_il2jm"), Vector2(0, -2), PackedVector2Array(-2, -4, -4, -2, -5, 0, -5, 2, 5, 2, 6, 1, 6, -2, 3, -4), NodePath("../Sprite2D"), SubResource("AnimationLibrary_2l27d"), SubResource("AnimationNodeBlendTree_vf7fb"), NodePath(".."), NodePath("../AnimationPlayer"), Vector2(8, 0), 16, ExtResource("10_wjb0r"), "uid://daf6mth5c04fo", PackedVector2Array(-5, 0, -5, -2, -4, -4, -2, -6, 3, -6, 6, -4, 6, -1, 5, 0, 0, 0), 8, ExtResource("11_mc2jv"), "uid://bb6251mkcxpn5", Vector2(0.5, -3), SubResource("RectangleShape2D_2l27d"), Vector2(1, -2), 4.0],
+"version": 3
+}
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_wse8f"]
 vertices = PackedVector2Array(144, 346, 134, 346, 134, 337, 144, 337, 181, 346, 168, 346, 168, 336, 181, 336, 206, 346, 205, 346, 205, 337, 206, 337, 264, 346, 254, 346, 254, 337, 264, 337, 314, 38, 314, 186, 218, 186, 70, 38, 218, 326, 248, 326, 248, 330, 230, 330, 230, 332, 211, 332, 211, 317, 187, 317, 187, 333, 186, 333, 186, 316, 166, 316, 166, 186, 124, 186, 124, 170, 100, 170, 100, 186, 91, 186, 91, 167, 70, 167, 162, 332, 156, 332, 156, 326, 162, 326, 282, 331, 272, 331, 272, 326, 282, 326)
@@ -50,6 +226,14 @@ offset_top = 10.0
 offset_right = 78.0
 offset_bottom = 27.0
 
+[node name="goblin_spawner" parent="." unique_id=13002659 instance=ExtResource("4_2o6r5")]
+position = Vector2(297, 107)
+enemy_prefab = ExtResource("14_70uel")
+
+[node name="slime_spawner" parent="." unique_id=780593553 instance=ExtResource("4_2o6r5")]
+position = Vector2(75, 107)
+enemy_prefab = SubResource("PackedScene_bo7i5")
+
 [node name="GroundLayer" type="Node2D" parent="." unique_id=1650891733]
 z_index = -1
 
@@ -68,11 +252,8 @@ tile_map_data = PackedByteArray("AAADAAYAAAAOAAAAAAAEAAYAAAAmAAAAAAAKAAUAAAAhAAA
 tile_set = ExtResource("2_036b0")
 y_sort_origin = 16
 
-[node name="enemy_spawner" parent="." unique_id=780593553 instance=ExtResource("4_2o6r5")]
-position = Vector2(297, 107)
-enemy_prefab = ExtResource("7_pkg7o")
-
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=181977771]
+show_behind_parent = true
 navigation_polygon = SubResource("NavigationPolygon_wse8f")
 
 [node name="Player" parent="." unique_id=1422879664 instance=ExtResource("1_f3sb7")]
@@ -146,6 +327,9 @@ position = Vector2(192, 170)
 
 [node name="SlimeEnemy2" parent="." unique_id=492296050 instance=ExtResource("7_pkg7o")]
 position = Vector2(207, 311)
+
+[node name="GoblinEnemy" parent="." unique_id=791175281 instance=ExtResource("14_70uel")]
+position = Vector2(191, 246)
 
 [node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="." unique_id=1339695852]
 process_mode = 3

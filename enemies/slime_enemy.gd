@@ -24,6 +24,8 @@ const XP = 1
 
 @export var player: Player
 
+
+
 signal enemy_death()
 
 func _ready() -> void:
