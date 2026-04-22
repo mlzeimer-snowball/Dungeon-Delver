@@ -26,6 +26,7 @@ const XP = 3
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var launcher: Marker2D = $Launcher
 @onready var timer: Timer = $Timer
+@onready var buffer_area_2d: Area2D = $BufferArea2D
 
 @export var player: Player
 
@@ -34,6 +35,7 @@ signal enemy_death()
 
 var state = "IdleState"
 var attack_ready = true
+var push_force = 250
 
 func _ready() -> void:
 	stats = stats.duplicate()
@@ -108,6 +110,9 @@ func _physics_process(delta: float) -> void:
 			move_and_slide()
 		"AttackState":
 			pass
+	apply_buffers(delta)
+	if velocity.length()>SPEED*1.2:
+		velocity.limit_length(SPEED*1.2)
 			
 func die() -> void:
 	var death_effect = DEATH_EFFECT.instantiate()
@@ -189,3 +194,16 @@ func can_see_player() -> bool:
 	ray_cast_2d.force_raycast_update()
 	var has_los_to_player: = not ray_cast_2d.is_colliding()
 	return has_los_to_player
+
+func apply_buffers(delta):
+	var overlapping_bodies = buffer_area_2d.get_overlapping_areas()
+	var separation_vector = Vector2.ZERO
+	for body in overlapping_bodies:
+		if body == self:
+			continue
+		var direction = (global_position - body.global_position).normalized()
+		var distance = global_position.distance_to(body.global_position)
+		var force = 1.0 - (distance / (buffer_area_2d.get_child(0).shape.radius * 2)) # Adjust based on shape
+		separation_vector += direction * force
+	velocity += separation_vector.normalized() * push_force * delta
+			
