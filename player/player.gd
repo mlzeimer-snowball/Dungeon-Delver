@@ -14,9 +14,12 @@ var last_input_vector = Vector2.DOWN
 @onready var blink_animation_player: AnimationPlayer = $BlinkAnimationPlayer
 @onready var hurtbox: Hurtbox = $Hurtbox
 @onready var hurt_audio_stream_player: AudioStreamPlayer2D = $HurtAudioStreamPlayer
+@onready var poison_timer: Timer = $PoisonTimer
 
 signal health_changed(new_health)
 signal respawned()
+
+var is_poisoned = false
 
 func _ready() -> void:
 	hurtbox.hurt.connect(take_hit.call_deferred)
@@ -36,6 +39,8 @@ func die() -> void:
 	#hide()
 	#remove_from_group("player")
 	#process_mode = Node.PROCESS_MODE_DISABLED
+	poison_timer.start(0)
+	is_poisoned=false
 	respawned.emit()
 
 func move_state(delta: float) -> void:
@@ -58,12 +63,22 @@ func roll_state(delta: float) -> void:
 	velocity = last_input_vector.normalized() * ROLL_SPEED
 	move_and_slide()
 	
-func take_hit(other_hitbox: Hitbox) -> void:
+func take_hit(other_hitbox: Hitbox, poison: bool) -> void:
 	hurt_audio_stream_player.play()
 	stats.health -= other_hitbox.damage
 	stats.health = clamp(stats.health, 0, stats.max_health)
 	health_changed.emit(stats.health)
 	blink_animation_player.play("blink")
+	if poison:
+		is_poisoned = true
+		poison_timer.start(poison_timer.time_left + 5)
+		while poison_timer.time_left > 0:
+			stats.health-=1
+			stats.health = clamp(stats.health, 0, stats.max_health)
+			health_changed.emit(stats.health)
+			blink_animation_player.play("poison_blink")
+			await get_tree().create_timer(2.0).timeout
+		is_poisoned = false
 
 func update_blend_positions(direction_vector: Vector2) -> void:
 	animation_tree.set("parameters/StateMachine/MoveState/RunState/blend_position", direction_vector)

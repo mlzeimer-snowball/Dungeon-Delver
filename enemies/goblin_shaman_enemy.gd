@@ -2,14 +2,17 @@ extends CharacterBody2D
 
 const HIT_EFFECT = preload("uid://n4ayhex880q1")
 const DEATH_EFFECT = preload("uid://qopvvt3pqdab")
+const SUMMON_EFFECT = preload("uid://bigsoae0sv5i5")
 const SPEAR = preload("uid://dg1tn2r6t6mfa")
+const POISON_BOLT = preload("uid://lxtdmpa4qtpg")
+const SLIME_SPAWNER = preload("uid://y8i66d1steai")
 
-const SPEED = 50
+const SPEED = 40
 const FRICTION = 500
 const XP = 3
 
-@export var min_range: = 48
-@export var target_range: = 96
+@export var min_range: = 80
+@export var target_range: = 128
 @export var max_range: = 160
 @export var escape_range: = 196
 
@@ -27,13 +30,15 @@ const XP = 3
 @onready var launcher: Marker2D = $Launcher
 @onready var timer: Timer = $Timer
 @onready var buffer_area_2d: Area2D = $BufferArea2D
+@onready var summon: Marker2D = $Summon
 
 @export var player: Player
-
 
 signal enemy_death()
 
 var state = "IdleState"
+var spell_ready = true
+var summon_ready = true
 var attack_ready = true
 var push_force = 250
 
@@ -66,8 +71,10 @@ func _on_state_entered(new_state):
 			sprite_2d.scale.x = sign(velocity.x)
 		else:
 			velocity = Vector2.ZERO
-	elif new_state == "AttackState":
-		attack()
+	elif new_state == "SpellState":
+		cast_spell()
+	elif new_state == "SummonState":
+		cast_summon()
 	elif new_state == "FleeState":
 		await get_tree().create_timer(randf_range(.1,.5)).timeout
 	elif new_state == "ChaseState":
@@ -108,12 +115,13 @@ func _physics_process(delta: float) -> void:
 			pass
 		"MenaceWalkState":
 			move_and_slide()
-		"AttackState":
+		"SpellState":
+			pass
+		"SummonState":
 			pass
 	apply_buffers(delta)
 	if velocity.length()>SPEED*1.2:
 		velocity.limit_length(SPEED*1.2)
-		
 			
 func die() -> void:
 	var death_effect = DEATH_EFFECT.instantiate()
@@ -128,28 +136,54 @@ func take_hit(other_hitbox: Hitbox, poison: bool) -> void:
 	hit_effect.global_position = center.global_position
 	stats.health -= other_hitbox.damage
 	velocity = other_hitbox.knockback_direciton * other_hitbox.knockback_amount
-	min_range = 80
 	playback.start("HitState")
 	
-func attack() -> void:
+func cast_spell() -> void:
 	var player: = get_player()
 	if player is Player:
 		var cur = sprite_2d.scale.x
 		sprite_2d.scale.x = sign(global_position.direction_to(player.global_position).x)
 		if sprite_2d.scale.x * cur <0:
 			launcher.position.x = -abs(launcher.position.x)
-		playback.start("AttackState")
+		playback.start("SpellState")
 		await playback.state_finished
-		var spear = SPEAR.instantiate()
-		get_tree().current_scene.add_child(spear)
-		spear.global_position = launcher.global_position
-		spear.throw()
+		var poison_bolt = POISON_BOLT.instantiate()
+		get_tree().current_scene.add_child(poison_bolt)
+		poison_bolt.global_position = launcher.global_position
+		poison_bolt.shoot()
+		spell_ready = false
 		attack_ready = false
-		start_attack_timer()
+		start_spell_timer()
+
+func cast_summon() -> void:
+	var player: = get_player()
+	if player is Player:
+		var summon_effect = SUMMON_EFFECT.instantiate()
+		get_tree().current_scene.add_child(summon_effect)
+		summon_effect.global_position = summon.global_position
+		playback.start("SummonState")
+		await playback.state_finished
+		var slime_spawner = SLIME_SPAWNER.instantiate()
+		get_tree().current_scene.add_child(slime_spawner)
+		slime_spawner.global_position = summon.global_position
+		slime_spawner.spawn("uid://dibn888a1bccm")
+		summon_ready = false
+		attack_ready = false
+		start_summon_timer()
 		
-func start_attack_timer() -> void:
-	await get_tree().create_timer(randf_range(2,5)).timeout
+func start_spell_timer() -> void:
+	await get_tree().create_timer(2).timeout
 	attack_ready = true
+	
+	await get_tree().create_timer(randf_range(2,4)).timeout
+	spell_ready = true
+	
+func start_summon_timer() -> void:
+	await get_tree().create_timer(2).timeout
+	attack_ready = true
+	
+	await get_tree().create_timer(randf_range(6,10)).timeout
+	summon_ready = true
 
 func get_player() -> Player:
 	return get_tree().get_first_node_in_group("player")

@@ -1,11 +1,12 @@
 extends CharacterBody2D
 
-const SPEED = 200
+const SPEED = 100
 const SPEAR = preload("uid://dg1tn2r6t6mfa")
 @onready var hitbox: Hitbox = $Hitbox
 @onready var area_2d: Area2D = $Area2D
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
-signal hurt(hitbox: Hitbox)
+signal hurt(hitbox: Hitbox,poison: bool)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -22,16 +23,15 @@ func get_player() -> Player:
 	return get_tree().get_first_node_in_group("player")
 
 func _on_area_entered(area_2d: Area2D) -> void:
-	hurt.emit(area_2d)
+	hurt.emit(area_2d,true)
 	queue_free()
 	
 func _on_body_entered(area_2d) -> void:
 	queue_free()
 	
-func throw():
+func shoot():
 	var player = get_player()
 	if player is Player:
 		self.look_at(player.global_position)
-		var inacc = randf_range(-10,10)
-		rotation_degrees -= 90 + inacc
-		velocity = self.global_position.direction_to(player.global_position).rotated(deg_to_rad(inacc)) * SPEED
+		animated_sprite_2d.rotation_degrees -= 180
+		velocity = self.global_position.direction_to(player.global_position) * SPEED
