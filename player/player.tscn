@@ -993,6 +993,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_65viv"]
 resource_name = "blink"
@@ -1022,10 +1034,40 @@ tracks/1/keys = {
 "values": [true, false]
 }
 
+[sub_resource type="Animation" id="Animation_x7c3f"]
+resource_name = "poison_blink"
+length = 2.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.5, 0.8, 0.90000004, 1.2, 1.3000001, 1.6, 1.7, 1.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true, false, true, false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.07058824, 0.9764706, 0, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_x7c3f"]
 _data = {
 &"RESET": SubResource("Animation_c35mf"),
-&"blink": SubResource("Animation_65viv")
+&"blink": SubResource("Animation_65viv"),
+&"poison_blink": SubResource("Animation_x7c3f")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g6k8r"]
@@ -1098,3 +1140,5 @@ shape = SubResource("RectangleShape2D_g6k8r")
 
 [node name="HurtAudioStreamPlayer" type="AudioStreamPlayer2D" parent="." unique_id=707629769]
 stream = ExtResource("9_hg6s5")
+
+[node name="PoisonTimer" type="Timer" parent="." unique_id=1727150796]

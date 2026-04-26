@@ -56,7 +56,7 @@ func die() -> void:
 	enemy_death.emit()
 	queue_free()
 
-func take_hit(other_hitbox: Hitbox) -> void:
+func take_hit(other_hitbox: Hitbox, poison: bool) -> void:
 	var hit_effect = HIT_EFFECT.instantiate()
 	get_tree().current_scene.add_child(hit_effect)
 	hit_effect.global_position = center.global_position

@@ -4,6 +4,7 @@ class_name Hitbox extends Area2D
 @export var knockback_direciton: Vector2
 @export var knockback_amount: = 150
 @export var stores_hit_targets: bool = false
+@export var poison = false
 
 var hit_targets: Array
 
