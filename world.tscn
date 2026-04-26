@@ -9,10 +9,12 @@
 [ext_resource type="PackedScene" uid="uid://dctikxd7ki8vv" path="res://world/boulder.tscn" id="3_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://y8i66d1steai" path="res://enemies/enemy_spawner.tscn" id="4_2o6r5"]
 [ext_resource type="PackedScene" uid="uid://bg0uywtw61rgb" path="res://world/pit.tscn" id="4_aqk2v"]
+[ext_resource type="PackedScene" uid="uid://4uv750hgw6lc" path="res://enemies/goblin_shaman_enemy.tscn" id="6_bc84e"]
 [ext_resource type="PackedScene" uid="uid://lueexi6aret5" path="res://world/crate.tscn" id="6_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://dibn888a1bccm" path="res://enemies/slime_enemy.tscn" id="7_pkg7o"]
 [ext_resource type="AudioStream" uid="uid://bf5c2r43shamj" path="res://music_and_sounds/Music.wav" id="9_ioo17"]
 [ext_resource type="PackedScene" uid="uid://dexr023aevc74" path="res://pauser.tscn" id="10_wse8f"]
+[ext_resource type="PackedScene" uid="uid://bi1j1sro2xikl" path="res://enemies/goblin_enemy.tscn" id="14_70uel"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_wse8f"]
 vertices = PackedVector2Array(144, 346, 134, 346, 134, 337, 144, 337, 181, 346, 168, 346, 168, 336, 181, 336, 206, 346, 205, 346, 205, 337, 206, 337, 264, 346, 254, 346, 254, 337, 264, 337, 314, 38, 314, 186, 218, 186, 70, 38, 218, 326, 248, 326, 248, 330, 230, 330, 230, 332, 211, 332, 211, 317, 187, 317, 187, 333, 186, 333, 186, 316, 166, 316, 166, 186, 124, 186, 124, 170, 100, 170, 100, 186, 91, 186, 91, 167, 70, 167, 162, 332, 156, 332, 156, 326, 162, 326, 282, 331, 272, 331, 272, 326, 282, 326)
@@ -50,6 +52,18 @@ offset_top = 10.0
 offset_right = 78.0
 offset_bottom = 27.0
 
+[node name="goblin_spawner" parent="." unique_id=13002659 instance=ExtResource("4_2o6r5")]
+position = Vector2(297, 107)
+enemy_prefab = ExtResource("14_70uel")
+
+[node name="goblin_shaman_spawner" parent="." unique_id=780593553 instance=ExtResource("4_2o6r5")]
+position = Vector2(270, 164)
+enemy_prefab = ExtResource("6_bc84e")
+
+[node name="slime_spawner" parent="." unique_id=521646325 instance=ExtResource("4_2o6r5")]
+position = Vector2(75, 107)
+enemy_prefab = ExtResource("7_pkg7o")
+
 [node name="GroundLayer" type="Node2D" parent="." unique_id=1650891733]
 z_index = -1
 
@@ -68,11 +82,8 @@ tile_map_data = PackedByteArray("AAADAAYAAAAOAAAAAAAEAAYAAAAmAAAAAAAKAAUAAAAhAAA
 tile_set = ExtResource("2_036b0")
 y_sort_origin = 16
 
-[node name="enemy_spawner" parent="." unique_id=780593553 instance=ExtResource("4_2o6r5")]
-position = Vector2(297, 107)
-enemy_prefab = ExtResource("7_pkg7o")
-
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=181977771]
+show_behind_parent = true
 navigation_polygon = SubResource("NavigationPolygon_wse8f")
 
 [node name="Player" parent="." unique_id=1422879664 instance=ExtResource("1_f3sb7")]
@@ -146,6 +157,9 @@ position = Vector2(192, 170)
 
 [node name="SlimeEnemy2" parent="." unique_id=492296050 instance=ExtResource("7_pkg7o")]
 position = Vector2(207, 311)
+
+[node name="GoblinEnemy" parent="." unique_id=791175281 instance=ExtResource("14_70uel")]
+position = Vector2(191, 246)
 
 [node name="BackgroundMusic" type="AudioStreamPlayer2D" parent="." unique_id=1339695852]
 process_mode = 3

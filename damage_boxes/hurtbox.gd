@@ -1,6 +1,6 @@
 class_name Hurtbox extends Area2D
 
-signal hurt(hitbox: Hitbox)
+signal hurt(hitbox: Hitbox,poison: bool)
 
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)
@@ -10,4 +10,5 @@ func _on_area_entered(area_2d: Area2D) -> void:
 	var hitbox = area_2d as Hitbox
 	if self in hitbox.hit_targets: return
 	if hitbox.stores_hit_targets: hitbox.hit_targets.append(self)
-	hurt.emit(area_2d)
+	hurt.emit(area_2d,hitbox.poison)
+	
